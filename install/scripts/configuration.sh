@@ -3,7 +3,23 @@
 sliceconfig=`dirname $0`/../..
 sliceconfig=`readlink -f $sliceconfig`
 
+# fail on warnings if not empty
+STRICT=${STRICT-}
+# do not make any changes if not empty
+DRY_RUN=${DRY_RUN-}
+
 variables=( $(cat "$sliceconfig/etc.conf" | sed 's,^[[:blank:]]*,,;s,[[:blank:]]*$,,' | egrep -v '^(#|$)') )
+
+warning()
+{
+	echo $1
+	[ -n $STRICT ] && exit 1
+}
+
+bad_format()
+{
+	echo "$1" | grep -q '!'
+}
 
 # various functions 
 function copy_file()
@@ -42,9 +58,10 @@ function copy_file()
     # replace variables
     for x in ${variables[@]}; do
 	local variable,value
+        bad_format "$x" && warning "the string'${x}' should not contain '!'"
         variable=`echo $x|awk -F '=' '{print $1}'`
         value=`echo $x|awk -F '=' '{print $2}'`
-        sed -i -e "s!$variable!$value!" $dest_file
+        [ -z $DRY_RUN ] || sed -i -e "s!$variable!$value!" $dest_file
     done
 }
 
