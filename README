@@ -186,6 +186,6 @@ versionlock
 
   * change variables if it necessary and Important set up file
     with private data:
-    vim scripts/configuration.sh
+    vim etc.conf
   * run the base stack installation and follow instructions
     sh install_base.sh

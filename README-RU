@@ -188,7 +188,7 @@ RubyWorks.
 
   * При необходимости изменить переменные (variables), и
     ОБЯЗАТЕЛЬНО указать файл с приватными данными
-    vim scripts/configuration.sh
+    vim etc.conf
   * запустить установку базового стека и следовать
     инструкциям
     sh install_base.sh

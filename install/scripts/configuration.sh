@@ -1,21 +1,14 @@
-# variables
+#!/bin/sh
 
 sliceconfig=`dirname $0`/../..
 sliceconfig=`readlink -f $sliceconfig`
 
-variables=(
-    CONFIG_SSH_PORT=22222
-    CONFIG_ALLOW_ROOT_LOGIN=no
-    # root mail
-    CONFIG_ROOT_ADDRESS="notify.root@flatsoft.com"
-    # where stores private files
-    CONFIG_PRIVATE="user@hostname:/path/to/config/file.tar.bz2"
-    CONFIG_PASSENGER_VERSION="2.2.7"
-    )
+variables=( $(cat "$sliceconfig/etc.conf" | sed 's,^[[:blank:]]*,,;s,[[:blank:]]*$,,' | egrep -v '^(#|$)') )
 
 # various functions 
 function copy_file()
 {
+    local x, src_file, dest_file
     src_file=$1
     dest_file=$2
     #check variables
@@ -45,8 +38,10 @@ function copy_file()
     
     #create file
     cp -f "$src_file" "$dest_file"
+
     # replace variables
     for x in ${variables[@]}; do
+	local variable,value
         variable=`echo $x|awk -F '=' '{print $1}'`
         value=`echo $x|awk -F '=' '{print $2}'`
         sed -i -e "s!$variable!$value!" $dest_file
