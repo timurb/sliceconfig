@@ -26,6 +26,8 @@ h2. Things that I think worth to be done but not necessary
 h2. Just some questions
 
  * why passenger and not unicorn?
+ * does httpd and nginx run as root? (see `security/scripts/setup_perms_{httpd,nginx}.sh`)
+ It is much safer to run them as a dedicated user
 
 h2. Tasks to do later
 
