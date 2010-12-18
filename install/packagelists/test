@@ -1,0 +1,6 @@
+# this line will not be run -- it is a comment
+
+   # blank spaces are stripped
+	 test1    
+# the following line runs the script with a parameter
+  test2 1  

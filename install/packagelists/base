@@ -1,0 +1,92 @@
+# Copyright (c) 2008-2009, the Flatsoft, LLC.
+# All rights reserved
+
+# clean yum database
+clean_yum
+
+# copy private files from another host
+copy_private_files
+
+# setup valid perms on sliceconfigs
+setup_perms_sliceconfig
+
+
+# yum configuration
+update_yum
+setup_yum
+
+# remove unused rpms
+erase_i386
+#erase_hal 
+
+# install required software
+install_perl
+install_sendmail
+install_security_base
+install_tools_editors
+install_tools_system
+install_tools_build
+install_tools_network_debug
+install_tools_net_utils
+install_vsftpd
+
+install_ruby_enterprise
+install_git
+install_rdup
+install_s3sync
+install_munin_node
+install_monit
+install_image_magick
+
+# user configuration
+setup_users_root
+setup_users_admin
+
+
+# system configuration
+setup_motd
+setup_i18n
+setup_hosts
+setup_aliases
+setup_crond
+setup_ssh
+setup_logwatch
+setup_ruby_enterprise_path
+#setup_ssh_logger
+setup_iptables
+setup_sudo
+setup_sendmail
+setup_vsftpd
+setup_rkhunter
+setup_monit
+setup_munin_node
+setup_rdup
+setup_s3sync
+
+
+# erase unused users
+erase_users
+
+
+# overwrite users bashrc
+setup_users_bashrc
+
+
+# setup perm on several dirs
+setup_perms_root
+setup_perms_home
+setup_perms_etc
+setup_perms_logs
+setup_perms_backups
+setup_perms_tools
+setup_perms_suid
+
+
+# upgrade system
+update_yum
+update_rkhunter_db
+update_rkhunter_hash
+
+
+# erase history
+erase_history

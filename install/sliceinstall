@@ -1,0 +1,31 @@
+#!/bin/sh
+
+BASEDIR=$(dirname $0)
+
+abort() {
+	[ -n "$1" ] && echo "$*"
+	exit 1
+}
+
+usage() {
+	abort "Usage: $0 packagename"
+}
+
+[ -z "$1" ] && usage
+[ -f "${BASEDIR}/$1" ] && SCRIPT="$1"
+SCRIPT=${SCRIPT:-$([ -f "${BASEDIR}/packagelists/$1" ] && echo "${BASEDIR}/packagelists/$1" )}
+[ -z "$SCRIPT" ] && abort "ERROR: could not find '$1' in ${BASEDIR}/, ${BASEDIR}/packagelists/"
+
+PACKAGES=$( cat "$SCRIPT" | sed 's,^[[:blank:]]*,,;s,[[:blank:]]*$,,;s,[[:blank:]],!,' | egrep -v '^(#|$)')
+
+#  check for existance of all specified packages
+for line in $PACKAGES; do
+	script="${BASEDIR}/packages/$( echo $line | cut -f 1 -d '!' )"
+	[ -f "$script" ] || abort "ERROR: cannot find the script '${script}'"
+done
+
+#  actually run packages
+for line in $PACKAGES; do
+	script="${BASEDIR}/packages/$( echo $line | sed 's,!, ,')"
+	sh $script
+done

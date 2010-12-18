@@ -1,0 +1,15 @@
+The code commited by me is untested in its whole.
+Please don't run it in production until tested.
+
+Timur Batyrshin
+
+
+h2. Usage
+
+ # Put the list of scripts to be installed into packagelists/listname
+   Scripts are to be placed in 'packages/' dir and should not contain the ! symbol
+ # Run `sliceinstall listname`
+
+So sliceinstall base should produce the same result as install_base.sh
+
+There is 'test' packagelist, see it in packagelists/test to get an example

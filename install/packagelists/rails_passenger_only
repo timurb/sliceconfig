@@ -1,0 +1,29 @@
+# Copyright (c) 2008-2009, the Flatsoft, LLC.
+# All rights reserved
+
+# install required software
+install_nginx_passenger
+
+# user configurations
+setup_users_rails
+
+# nginx  configuration
+setup_nginx_passenger
+
+# ssl configuration
+setup_nginx_ca
+
+
+# software configuration
+setup_munin_node_nginx
+setup_monit_nginx
+
+
+# setup perm on several dirs
+setup_perms_nginx
+setup_perms_rails
+setup_perms_etc
+
+
+# erase history
+erase_history
