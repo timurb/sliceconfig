@@ -22,6 +22,7 @@ h2. Things that I think worth to be done but not necessary
  ** make `copy_file` and `get_value` DRYer
  * download RPMs from network rather than bringing them with ourselvers -- it makes updates easier and we save some diskspace and bandwidth
  * svnserve_conf in setup_monit_svnserve.sh, ngconf in setup_nginx_*.sh are specified by variables. If we are to change them we'd rather put them to somewhere like etc.conf and retrieve their values with get_value()
+ * do we actually need sendmail? If we are to send mail outwards we could use something as simple as ssmtp or the postfix with smtpd switched off (if we need the mail not to be lost ever) -- it would be much more secure
 
 h2. Just some questions
 
