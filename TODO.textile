@@ -11,6 +11,8 @@ h2. Things that should be done but require integrated testing
  ** except gems as they have rather wicked build/install/dependencies system
  * `install/scripts/setup_httpd_passenger.sh` has `exit` command at line 15 so that it does nothing it was supposed to do -- just only copy httpd.conf
  It is a possible cause of https://www.pivotaltracker.com/projects/57704?story_id=5314707
+ * I'd rather you do not put private ssh keys on each host (see setup_users_admin.sh). Even though they are password protected (aren't they?) if the attacker get access to them all your hosts will be compromised
+ * The host-generated key for root has no password. If the attacker gets root access to one of your hosts all hosts which this host had access to will be compromised at once.
 
 
 h2. Things that I think worth to be done but not necessary
@@ -19,7 +21,7 @@ h2. Things that I think worth to be done but not necessary
  ** split `copy_file` into several functions
  ** make `copy_file` and `get_value` DRYer
  * download RPMs from network rather than bringing them with ourselvers -- it makes updates easier and we save some diskspace and bandwidth
- * svnserve_conf in setup_monit_svnserve.sh is specified with a variable. If we are to change it we'd rather put it somewhere like etc.conf and retrieve its value with get_value()
+ * svnserve_conf in setup_monit_svnserve.sh, ngconf in setup_nginx_*.sh are specified by variables. If we are to change them we'd rather put them to somewhere like etc.conf and retrieve their values with get_value()
 
 h2. Just some questions
 
@@ -27,5 +29,5 @@ h2. Just some questions
 
 h2. Tasks to do later
 
- * separate automysqlbackup script from installation `setup_backup.sh` script
+ * separate templates from scripts in `install/scripts/{setup_backup.sh,setup_nginx_ca.sh}, install/interactive/*`
  * bundle optimization
