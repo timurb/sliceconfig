@@ -11,6 +11,7 @@ h2. Things that should be done but require integrated testing
  ** except gems as they have rather wicked build/install/dependencies system
  * `install/scripts/setup_httpd_passenger.sh` has `exit` command at line 15 so that it does nothing it was supposed to do -- just only copy httpd.conf
  It is a possible cause of https://www.pivotaltracker.com/projects/57704?story_id=5314707
+ ** btw this script is invoked twice from the install_apache_only.php
  * I'd rather you do not put private ssh keys on each host (see setup_users_admin.sh). Even though they are password protected (aren't they?) if the attacker get access to them all your hosts will be compromised
  * The host-generated key for root has no password. If the attacker gets root access to one of your hosts all hosts which this host had access to will be compromised at once.
 
