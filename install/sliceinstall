@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -f
 
 BASEDIR=$(dirname $0)
 
@@ -11,6 +11,8 @@ usage() {
 	abort "Usage: $0 packagename"
 }
 
+SCRIPTS_EXCLUDE='*.rpm* *.swp *~ *.\# .*'
+
 #  check for existance of all specified packages and recursively expand subdirs
 checkpackages() {
   local line
@@ -18,11 +20,20 @@ checkpackages() {
   local param
   local pathpackage
   local packages
+  local p
 
   [ -z "$*" ] && abort "ERROR: checkpackages: parameter should be specified"
 
   for line in $*; do
 	package=$( echo "$line" | cut -f 1 -d '!' )
+
+#  skip files specified in $SCRIPTS_EXCLUDE
+# Note: it works correctly only when the script is run with sh -f (see shebang)
+	for p in $SCRIPTS_EXCLUDE; do
+		[ -z "${package##$p}" ] && \
+			continue 2
+	done
+
 	pathpackage="${BASEDIR}/packages/$package"
 	param=$(echo "$line" | sed 's,[^!]*!\?,,')
 
