@@ -94,4 +94,10 @@ PACKAGES=$( checkpackages $PACKAGES ) ||
 	exit $?
 
 #  actually run packages
-runpackages $PACKAGES
+if [ "$2" == "--check" ]; then
+	for f in $PACKAGES; do
+	   echo $f | sed 's,!, ,'
+	done
+else 
+	runpackages $PACKAGES
+fi
