@@ -4,3 +4,6 @@
 	 test1    
 # the following line runs the script with a parameter
   test2 1  
+
+# this is a dir
+  test3 4

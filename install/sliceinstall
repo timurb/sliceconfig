@@ -11,21 +11,70 @@ usage() {
 	abort "Usage: $0 packagename"
 }
 
+#  check for existance of all specified packages and recursively expand subdirs
+checkpackages() {
+  local line
+  local package
+  local param
+  local pathpackage
+  local packages
+
+  [ -z "$*" ] && abort "ERROR: checkpackages: parameter should be specified"
+
+  for line in $*; do
+	package=$( echo "$line" | cut -f 1 -d '!' )
+	pathpackage="${BASEDIR}/packages/$package"
+	param=$(echo "$line" | sed 's,[^!]*!\?,,')
+
+	[ -d "$pathpackage" -a -h "$pathpackage" ] && \
+		abort "ERROR: the package should not be symlink to dir '${pathpackage}'"
+
+	[ -f "$pathpackage" -o -d "$pathpackage" ] || \
+		abort "ERROR: cannot find the package '${pathpackage}'"
+
+	if [ -d "$pathpackage" ]; then
+		packages=""
+		for a in $( ls "$pathpackage" ); do
+			packages="$packages ${package}/$a!${param}"
+		done
+		checkpackages "$packages"
+	else
+		echo -n "${package}!${param} "
+	fi
+  done
+}
+
+runpackages() {
+  local line
+  local package
+  local param
+
+  [ -z "$*" ] && abort "ERROR: runpackages: parameter should be specified"
+
+  for line in $*; do
+ 	package="${BASEDIR}/packages/$( echo $line | cut -f 1 -d '!')"
+	param=$(echo $line | sed 's,[^!]*!\?,,')
+	sh "$package" "$param"
+  done
+}
+
+#	main program
+
 [ -z "$1" ] && usage
-[ -f "${BASEDIR}/$1" ] && SCRIPT="$1"
-SCRIPT=${SCRIPT:-$([ -f "${BASEDIR}/packagelists/$1" ] && echo "${BASEDIR}/packagelists/$1" )}
-[ -z "$SCRIPT" ] && abort "ERROR: could not find '$1' in ${BASEDIR}/, ${BASEDIR}/packagelists/"
 
-PACKAGES=$( cat "$SCRIPT" | sed 's,^[[:blank:]]*,,;s,[[:blank:]]*$,,;s,[[:blank:]],!,' | egrep -v '^(#|$)')
+[ -f "${BASEDIR}/$1" ] && PACKAGELIST="$1"
 
-#  check for existance of all specified packages
-for line in $PACKAGES; do
-	script="${BASEDIR}/packages/$( echo $line | cut -f 1 -d '!' )"
-	[ -f "$script" ] || abort "ERROR: cannot find the script '${script}'"
-done
+PACKAGELIST=${PACKAGELIST:-$([ -f "${BASEDIR}/packagelists/$1" ] && echo "${BASEDIR}/packagelists/$1")}
+
+[ -z "$PACKAGELIST" ] && abort "ERROR: could not find '$1' in ${BASEDIR}/, ${BASEDIR}/packagelists/"
+
+PACKAGES=$( cat "$PACKAGELIST" | sed 's,^[[:blank:]]*,,;s,[[:blank:]]*$,,' | egrep -v '^(#|$)')
+
+echo $PACKAGES | egrep -qs '(\||<|>|!)' && 
+	abort "ERROR: package list should not contain |,<,>,! characters"
+
+PACKAGES=$( echo "$PACKAGES" | sed 's,[[:blank:]],!,' )
+PACKAGES=$( checkpackages $PACKAGES )
 
 #  actually run packages
-for line in $PACKAGES; do
-	script="${BASEDIR}/packages/$( echo $line | sed 's,!, ,')"
-	sh $script
-done
+runpackages $PACKAGES
