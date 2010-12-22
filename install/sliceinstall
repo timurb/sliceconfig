@@ -20,6 +20,7 @@ checkpackages() {
   local param
   local pathpackage
   local packages
+  local f
   local p
 
   [ -z "$*" ] && abort "ERROR: checkpackages: parameter should be specified"
@@ -37,16 +38,16 @@ checkpackages() {
 	pathpackage="${BASEDIR}/packages/$package"
 	param=$(echo "$line" | sed 's,[^!]*!\?,,')
 
-	[ -d "$pathpackage" -a -h "$pathpackage" ] && \
+	[ -d "$pathpackage" -a -h "$pathpackage" ] && 
 		abort "ERROR: the package should not be symlink to dir '${pathpackage}'"
 
-	[ -f "$pathpackage" -o -d "$pathpackage" ] || \
+	[ -f "$pathpackage" -o -d "$pathpackage" ] || 
 		abort "ERROR: cannot find the package '${pathpackage}'"
 
 	if [ -d "$pathpackage" ]; then
 		packages=""
-		for a in $( ls "$pathpackage" ); do
-			packages="$packages ${package}/$a!${param}"
+		for f in $( ls "$pathpackage" ); do
+			packages="$packages ${package}/$f!${param}"
 		done
 		checkpackages "$packages"
 	else
@@ -71,13 +72,17 @@ runpackages() {
 
 #	main program
 
-[ -z "$1" ] && usage
+[ -z "$1" ] &&
+	usage
 
-[ -f "${BASEDIR}/$1" ] && PACKAGELIST="$1"
+[ -f "${BASEDIR}/$1" ] &&
+	PACKAGELIST="$1"
 
-PACKAGELIST=${PACKAGELIST:-$([ -f "${BASEDIR}/packagelists/$1" ] && echo "${BASEDIR}/packagelists/$1")}
+PACKAGELIST=${PACKAGELIST:-$([ -f "${BASEDIR}/packagelists/$1" ] &&
+					echo "${BASEDIR}/packagelists/$1")}
 
-[ -z "$PACKAGELIST" ] && abort "ERROR: could not find '$1' in ${BASEDIR}/, ${BASEDIR}/packagelists/"
+[ -z "$PACKAGELIST" ] && 
+	abort "ERROR: could not find '$1' in ${BASEDIR}/, ${BASEDIR}/packagelists/"
 
 PACKAGES=$( cat "$PACKAGELIST" | sed 's,^[[:blank:]]*,,;s,[[:blank:]]*$,,' | egrep -v '^(#|$)')
 
