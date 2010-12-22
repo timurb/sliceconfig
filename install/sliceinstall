@@ -3,7 +3,7 @@
 BASEDIR=$(dirname $0)
 
 abort() {
-	[ -n "$1" ] && echo "$*"
+	[ -n "$1" ] && echo "$*" > /dev/stderr
 	exit 1
 }
 
@@ -90,7 +90,8 @@ echo $PACKAGES | egrep -qs '(\||<|>|!)' &&
 	abort "ERROR: package list should not contain |,<,>,! characters"
 
 PACKAGES=$( echo "$PACKAGES" | sed 's,[[:blank:]],!,' )
-PACKAGES=$( checkpackages $PACKAGES )
+PACKAGES=$( checkpackages $PACKAGES ) ||
+	exit $?
 
 #  actually run packages
 runpackages $PACKAGES
