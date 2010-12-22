@@ -2,20 +2,11 @@
 # All rights reserved
 
 # install required software
-install_httpd
-install_php
-
-
-# software configuration
-setup_httpd
-setup_php
-setup_munin_node_httpd
-setup_monit_httpd
+httpd
+php
 
 
 # setup perm on several dirs
-setup_perms_php
-setup_perms_httpd
 setup_perms_etc
 
 

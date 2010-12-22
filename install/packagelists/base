@@ -21,21 +21,21 @@ erase_i386
 
 # install required software
 install_perl
-install_sendmail
+sendmail
 install_security_base
 install_tools_editors
 install_tools_system
 install_tools_build
 install_tools_network_debug
 install_tools_net_utils
-install_vsftpd
+vsftpd
 
 install_ruby_enterprise
 install_git
-install_rdup
+rdup
 install_s3sync
-install_munin_node
-install_monit
+munin_node
+monit
 install_image_magick
 
 # user configuration
@@ -55,12 +55,7 @@ setup_ruby_enterprise_path
 #setup_ssh_logger
 setup_iptables
 setup_sudo
-setup_sendmail
-setup_vsftpd
 setup_rkhunter
-setup_monit
-setup_munin_node
-setup_rdup
 setup_s3sync
 
 
